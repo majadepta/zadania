@@ -57,6 +57,19 @@ class Prey(Creature):
         super().__init__(p_death, p_reproduce)
         self.p_hunt = p_hunt
 
+    def reproduce(self):
+        if self.alive and (random.random() < self.p_reproduce):
+            return Prey(self.p_death, self.p_reproduce, self.p_hunt)
+        return None
+
+    @property
+    def p_hunt(self):
+        return self.__p_hunt
+
+    @p_hunt.setter
+    def p_hunt(self, value):
+        self.__p_hunt = min(1.0, max(0.0, value))
+
 
 
 class Predator(Creature):
@@ -68,7 +81,7 @@ class Predator(Creature):
 
     def hunt(self, prey: Prey):
 
-        if random.random() < prey.p_hunt:
+        if prey.alive and (random.random() < prey.p_hunt):
             prey.alive = False
             self.hungry = False
 
@@ -80,7 +93,6 @@ class Predator(Creature):
         else:
             if random.random() < self.p_death:
                 self.alive = False
-
 
 
 
